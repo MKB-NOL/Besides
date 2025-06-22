@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Besides - Home</title>
+    <style>
+        :root {
+            --besides-pink: #EC4899;
+            --besides-purple: #A855F7;
+            --pink-50: #FDF2F8;
+            --pink-200: #FBCFE8;
+            --pink-400: #F472B6;
+            --pink-700: #BE185D;
+            --purple-100: #F3E8FF;
+            --white: #FFFFFF;
+            --gray-200: #E5E7EB;
+            --red-500: #EF4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: linear-gradient(to bottom right, var(--pink-50), var(--purple-100));
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+
+        .container {
+            max-width: 36rem;
+            margin: 1rem auto;
+            padding: 1rem;
+        }
+
+        .header {
+            background: linear-gradient(to right, var(--besides-pink), var(--besides-purple));
+            padding: 1rem;
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 1rem;
+            z-index: 10;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            object-fit: cover;
+            border: 2px solid var(--white);
+        }
+
+        .user-name {
+            color: var(--white);
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .logout-button {
+            background: var(--white);
+            color: var(--pink-700);
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .logout-button:hover {
+            background: var(--pink-200);
+        }
+
+        .main-content {
+            margin-top: 1.5rem;
+        }
+
+        .post-form {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--pink-700);
+        }
+
+        .textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--pink-200);
+            border-radius: 0.75rem;
+            outline: none;
+            resize: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 1rem;
+        }
+
+        .textarea:focus {
+            border-color: var(--pink-400);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, 0.3);
+        }
+
+        .textarea::placeholder {
+            color: #9CA3AF;
+        }
+
+        .char-count {
+            font-size: 0.75rem;
+            color: var(--pink-700);
+            text-align: right;
+        }
+
+        .error {
+            color: var(--red-500);
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+        }
+
+        .submit-button {
+            width: 100%;
+            background: linear-gradient(to right, var(--besides-pink), var(--besides-purple));
+            color: var(--white);
+            padding: 0.75rem 1rem;
+            border: none;
+            border-radius: 0.75rem;
+            font-weight: 700;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .submit-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .submit-button:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .loader {
+            border: 2px solid var(--white);
+            border-top: 2px solid transparent;
+            border-radius: 50%;
+            width: 16px;
+            height: 16px;
+            animation: spin 1s linear infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .submit-button.loading .loader {
+            display: inline-block;
+        }
+
+        .submit-button.loading span {
+            display: none;
+        }
+
+        .quote-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .quote-card {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .quote-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .quote-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 9999px;
+            object-fit: cover;
+            border: 1px solid var(--pink-200);
+        }
+
+        .quote-user {
+            font-weight: 600;
+            color: var(--pink-700);
+            font-size: 0.875rem;
+        }
+
+        .quote-time {
+            font-size: 0.75rem;
+            color: #9CA3AF;
+        }
+
+        .quote-text {
+            font-size: 1rem;
+            color: var(--pink-700);
+            line-height: 1.5;
+        }
+
+        .vlog-section {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            margin-top: 1.5rem;
+            text-align: center;
+        }
+
+        .vlog-section h2 {
+            color: var(--besides-pink);
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+        }
+
+        .vlog-section p {
+            color: var(--pink-700);
+            font-size: 0.875rem;
+        }
+
+        .link {
+            color: var(--pink-400);
+            font-weight: 500;
+            text-decoration: none;
+        }
+
+        .link:hover {
+            color: var(--pink-600);
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                margin: 0.5rem;
+                padding: 0.5rem;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script type="module">
+        // Import Firebase SDK
+        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
+        import { getAuth, onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+        import { getFirestore, collection, addDoc, onSnapshot, query, orderBy } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js';
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyALNlMLF-Fxu87Ge5yfhp2m1R-vU58XcLo",
+            authDomain: "besides-sm.firebaseapp.com",
+            projectId: "besides-sm",
+            storageBucket: "besides-sm.firebasestorage.app",
+            messagingSenderId: "897908486036",
+            appId: "1:897908486036:web:e39140f75bec1b4d4de981",
+            measurementId: "G-BB0NMVRFLY"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // App state
+        let state = {
+            user: null,
+            quoteText: '',
+            quotes: [],
+            error: '',
+            isSubmitting: false,
+        };
+
+        // Format timestamp
+        function formatTimestamp(timestamp) {
+            const date = timestamp.toDate();
+            return date.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+        }
+
+        // Render function
+        function render() {
+            const app = document.getElementById('app');
+            if (!state.user) {
+                app.innerHTML = `<div class="container"><p class="error">Please sign in to access Besides.</p></div>`;
+                setTimeout(() => window.location.href = 'sign.html', 1000);
+                return;
+            }
+
+            const quoteCards = state.quotes.map(quote => `
+                <div class="quote-card">
+                    <div class="quote-header">
+                        <img src="${quote.photoURL || 'https://via.placeholder.com/32'}" class="quote-avatar" alt="${quote.displayName}'s avatar">
+                        <div>
+                            <div class="quote-user">${quote.displayName}</div>
+                            <div class="quote-time">${formatTimestamp(quote.timestamp)}</div>
+                        </div>
+                    </div>
+                    <p class="quote-text">${quote.text}</p>
+                </div>
+            `).join('');
+
+            app.innerHTML = `
+                <div class="container">
+                    <header class="header">
+                        <div class="user-profile">
+                            <img src="${state.user.photoURL || 'https://via.placeholder.com/40'}" class="user-avatar" alt="${state.user.displayName}'s avatar">
+                            <span class="user-name">${state.user.displayName}</span>
+                        </div>
+                        <button id="logout-button" class="logout-button">Logout</button>
+                    </header>
+                    <main class="main-content">
+                        <div class="post-form">
+                            <form id="quote-form" class="form-group">
+                                <label for="quote-text" class="label">Share a Quote</label>
+                                <textarea id="quote-text" class="textarea" placeholder="What's on your mind?" maxlength="280">${state.quoteText}</textarea>
+                                <div class="char-count">${state.quoteText.length}/280</div>
+                                <p id="quote-error" class="error">${state.error}</p>
+                                <button type="submit" class="submit-button ${state.isSubmitting ? 'loading' : ''}" ${state.isSubmitting ? 'disabled' : ''}>
+                                    <span class="loader"></span>
+                                    <span>Post Quote</span>
+                                </button>
+                            </form>
+                        </div>
+                        <div class="quote-feed">
+                            ${quoteCards || '<p class="text-center">No quotes yet. Be the first to post!</p>'}
+                        </div>
+                        <div class="vlog-section">
+                            <h2>Vlogs Coming Soon!</h2>
+                            <p>Stay tuned for our vlog feature where you can share and watch videos!</p>
+                        </div>
+                    </main>
+                </div>
+            `;
+
+            // Event Listeners
+            const quoteForm = document.getElementById('quote-form');
+            const quoteText = document.getElementById('quote-text');
+            const logoutButton = document.getElementById('logout-button');
+
+            quoteForm.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                if (!state.quoteText.trim()) {
+                    state.error = 'Quote cannot be empty';
+                    render();
+                    return;
+                }
+
+                state.isSubmitting = true;
+                state.error = '';
+                render();
+
+                try {
+                    await addDoc(collection(db, 'quotes'), {
+                        userId: state.user.uid,
+                        displayName: state.user.displayName,
+                        photoURL: state.user.photoURL,
+                        text: state.quoteText.trim(),
+                        timestamp: new Date(),
+                    });
+                    state.quoteText = '';
+                    state.isSubmitting = false;
+                } catch (error) {
+                    state.error = 'Failed to post quote. Please try again.';
+                    state.isSubmitting = false;
+                }
+                render();
+            });
+
+            quoteText.addEventListener('input', (e) => {
+                state.quoteText = e.target.value;
+                render();
+            });
+
+            logoutButton.addEventListener('click', async () => {
+                await signOut(auth);
+                window.location.href = 'sign.html';
+            });
+        }
+
+        // Auth state listener
+        onAuthStateChanged(auth, (user) => {
+            if (user && user.emailVerified) {
+                state.user = user;
+                // Listen for quotes
+                const q = query(collection(db, 'quotes'), orderBy('timestamp', 'desc'));
+                onSnapshot(q, (snapshot) => {
+                    state.quotes = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                    render();
+                });
+            } else {
+                state.user = null;
+                render();
+            }
+        });
+    </script>
+</body>
+</html>
