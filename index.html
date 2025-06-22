@@ -276,36 +276,6 @@
             text-align: center;
         }
 
-        .success-container {
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .success-container h2 {
-            color: var(--besides-pink);
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .success-container p {
-            color: var(--pink-700);
-            margin-bottom: 1.5rem;
-        }
-
-        .success-container .link {
-            display: inline-block;
-            background: var(--besides-pink);
-            color: var(--white);
-            padding: 0.5rem 1rem;
-            border-radius: 0.75rem;
-            text-decoration: none;
-        }
-
-        .success-container .link:hover {
-            background: var(--besides-purple);
-        }
-
         @media (max-width: 640px) {
             .container {
                 margin: 0 1rem;
@@ -341,10 +311,7 @@
                     <div class="form-group">
                         <label for="name" class="label">Your Name</label>
                         <div class="input-container">
-                            <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM12 14c-4.42 0-8 2.69-8 6v2h16v-2c0-3.31-3.58-6-8-6z"/>
-                            </svg>
-                            <input type="text" id="name" name="name" class="input" placeholder="YourName">
+                            <input type="text" id="name" name="input" class="input" placeholder="YourName">
                         </div>
                         <p id="name-error" class="error"></p>
                     </div>
@@ -352,11 +319,11 @@
                         <label for="password" class="label">Password</label>
                         <div class="input-container">
                             <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M12 14c1.66 0 3-1.34 3-3V7c0-1.66-1.34-3-3-3S9 5.34 9 7v4c0 1.66 1.34 3 3 3zm5 4v2H7v-2c0-2.76 2.24-5 5-5s5 2.24 5 5z"/>
+                                <path d="M12 14c1.66 0 3-1.34 3-3V7c0-1.66-1.34-3-3-3S9 5.34 9 7v4c0 1.66 1.34 3 3 3zm5 4v2H7v-2"/>
                             </svg>
                             <input type="password" id="password" name="password" class="input" placeholder="Shh... it's secret">
                             <button type="button" id="toggle-password" class="password-toggle">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="eye-icon">
+                                <svg class="eye-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8s4-8 11-8a10.07 10.07 0 015.94 2.06M9.9 4.24A9.12 9.12 0 0012 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/>
                                 </svg>
                             </button>
@@ -386,7 +353,7 @@
     <script type="module">
         // Import Firebase SDK
         import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, updateProfile, sendEmailVerification } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
+        import { getAuth, createUserWithEmailAndPassword, updateProfile } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js';
 
         // Firebase configuration
         const firebaseConfig = {
@@ -409,8 +376,6 @@
             errors: {},
             showPassword: false,
             isSubmitting: false,
-            isSubmitted: false,
-            submitError: '',
             imageScale: 1,
             imagePreview: null,
         };
@@ -452,15 +417,15 @@
             const profileImageCircle = document.getElementById('profile-image-circle');
             profileImageCircle.innerHTML = state.imagePreview
                 ? `<img src="${state.imagePreview}" class="profile-image-preview" style="--image-scale: ${state.imageScale};"></img>`
-                : `<svg class="profile-image-placeholder" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM12 14c-4.42 0-8 2.69-8 6v2h16v-2c0-3.31-3.58-6-8-6z"/></svg>`;
+                : `<svg class="profile-image-placeholder" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 12c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM12 14c-4.42 0-8 2.69-8 6v2h16v-2c0-3.31-3.58-6-8-8"/></svg>`;
             const resizeSliderContainer = document.getElementById('resize-slider-container');
             resizeSliderContainer.innerHTML = state.imagePreview
-                ? `<input type="range" id="image-scale" min="1" max="2" step="0.1" value="${state.imageScale}" class="resize-slider">`
+                ? `<input type="range" id="image-scale" min="1" max="2" step="0.1" value="${state.imageScale}" class="resize-slider"/>`
                 : '';
-            const eyeIcon = document.getElementById('eye-icon');
+            const eyeIcon = document.querySelector('.eye-icon');
             eyeIcon.innerHTML = state.showPassword
-                ? '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>'
-                : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8s4-8 11-8a10.07 10.07 0 015.94 2.06M9.9 4.24A9.12 9.12 0 0012 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/>';
+                ? '<path d="M1 12c0-4 4-8 11-8s11 8 11 8-4 8-11 8-11-4-11-8z"/><circle cx="12" cy="12" r="3"/>'
+                : '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8s4-7 11-7a10.07 10.07 0 015.94 2.06M9.9 4.24A9.12 9.12 0 0012 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22"/>';
         }
 
         // Initial render
@@ -468,7 +433,6 @@
 
         // Event Listeners
         const form = document.getElementById('signup-form');
-        const passwordInput = document.getElementById('password');
         const togglePassword = document.getElementById('toggle-password');
         const profileImageInput = document.getElementById('profile-image');
         const profileImageCircle = document.getElementById('profile-image-circle');
@@ -517,13 +481,11 @@
                         photoURL: result.data.url,
                     });
 
-                    // Send email verification
-                    await sendEmailVerification(user);
+                    // Store email in localStorage
+                    localStorage.setItem('userEmail', email);
 
-                    state.isSubmitting = false;
-                    state.isSubmitted = true;
-                    updateDOM();
-                    setTimeout(() => window.location.href = 'home.html', 1000);
+                    // Redirect to home.html
+                    window.location.href = 'home.html';
                 } catch (error) {
                     state.isSubmitting = false;
                     state.submitError = error.message || 'Failed to create account. Please try again.';
